@@ -1,7 +1,6 @@
 # BackPropagation
 
 {{< katex />}}
-{{ $stat_dir = "../../static/docs/notes/BackPropagation" }}
 
 <!--more-->
 
@@ -13,11 +12,11 @@
 
 <--->
 
-|              | input                                       | output                                               |
-| ------------ | ------------------------------------------- | ---------------------------------------------------- |
-| output layer | $\beta_j=\sum_{h=1}^{q} \omega_{h j} b_{h}$ | $\hat{y}_{j}^{k}=f\left(\beta_{j}-\theta_{j}\right)$ |
-| hidden layer | $\alpha_h=\sum_{i=1}^{d} v_{i h} x_{i}$     | $b_{n}=f\left(\alpha_{i h}-\gamma_{h}\right)$        |
-| input layer  | $x_i$                                       | .                                                    |
+|              | input                                       | output                                           |
+| ------------ | ------------------------------------------- | ------------------------------------------------ |
+| output layer | $\beta_j=\sum_{h=1}^{q} \omega_{h j} b_{h}$ | $\hat{y}_{j}^{k}=f\left(\beta_j-\theta_j\right)$ |
+| hidden layer | $\alpha_h=\sum_{i=1}^{d} v_{i h} x_{i}$     | $b_{n}=f\left(\alpha_{i h}-\gamma_{h}\right)$    |
+| input layer  | $x_i$                                       | .                                                |
 
 {{</columns>}}
 
