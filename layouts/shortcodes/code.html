@@ -1,0 +1,15 @@
+{{ $md := default "false" (.Get "md") }}
+{{ $stat_ref_dir := default "true" (.Get "stat_ref_dir") }}
+{{ $filename := .Get "file" }}
+{{- if eq $stat_ref_dir "true" -}}
+{{ $filename = path.Join ("/static/") (path.Join $.Page.RelPermalink $filename) }}
+{{- else -}}
+{{ $filename = (path.Join $.Page.File.Dir $filename) }}
+{{- end -}}
+{{ $file := $filename | readFile }}
+{{- if eq $md "true" -}}
+{{ $file | safeHTML }}
+{{- else -}}
+{{ $lang := default "" (.Get "lang") }}
+{{(print "```" $lang "\n" $file "\n```") | safeHTML }}
+{{- end -}}
