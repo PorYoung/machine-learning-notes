@@ -1,6 +1,6 @@
 # hugo server --minify --themesDir ... --baseURL=http://0.0.0.0:1313/theme/hugo-book/
 
-# baseURL: https://github.com/PorYoung/machine-learning-notes
+baseURL: https://poryoung.github.io/machine-learning-notes
 title: Machine Learning Notes
 theme: book
 publishDir: docs

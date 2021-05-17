@@ -2,7 +2,7 @@
 {{ $stat_ref_dir := default "true" (.Get "stat_ref_dir") }}
 {{ $filename := .Get "file" }}
 {{- if eq $stat_ref_dir "true" -}}
-{{ $filename = path.Join ("/static/") (path.Join $.Page.RelPermalink $filename) }}
+{{ $filename = path.Join ("/static/") (path.Join (path.Join $.Page.File.Dir $.Page.File.BaseFileName) $filename) }}
 {{- else -}}
 {{ $filename = (path.Join $.Page.File.Dir $filename) }}
 {{- end -}}
