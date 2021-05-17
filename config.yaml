@@ -3,6 +3,7 @@
 # baseURL: https://github.com/PorYoung/machine-learning-notes
 title: Machine Learning Notes
 theme: book
+publishDir: docs
 
 # Book configuration
 disablePathToLower: true
