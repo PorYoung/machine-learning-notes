@@ -1,0 +1,319 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="BackPropagation #    \(\)   Single-hidden Layer Feedforward Neural Network #       input output     output layer $\beta_j=\sum_{h=1}^{q} \omega_{h j} b_{h}$ $\hat{y}_{j}^{k}=f\left(\beta_j-\theta_j\right)$   hidden layer $\alpha_h=\sum_{i=1}^{d} v_{i h} x_{i}$ $b_{n}=f\left(\alpha_{i h}-\gamma_{h}\right)$   input layer $x_i$ .      LossFunction #  累计误差$E_k$，目标$min E_k$
+$$ E_{k}=\frac{1}{2} \sum_{j=1}^{l}\left(\hat{y}_{j}^{k}-y_{j}\right)^{2} $$
+Iterative Equations1 #  隐层到输出层连接边权值变化
+$$ \Delta \omega_{h}=-\eta \frac{\partial E_{k}}{a \omega_{k j}} $$"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content><meta property="og:description" content="BackPropagation #    \(\)   Single-hidden Layer Feedforward Neural Network #       input output     output layer $\beta_j=\sum_{h=1}^{q} \omega_{h j} b_{h}$ $\hat{y}_{j}^{k}=f\left(\beta_j-\theta_j\right)$   hidden layer $\alpha_h=\sum_{i=1}^{d} v_{i h} x_{i}$ $b_{n}=f\left(\alpha_{i h}-\gamma_{h}\right)$   input layer $x_i$ .      LossFunction #  累计误差$E_k$，目标$min E_k$
+$$ E_{k}=\frac{1}{2} \sum_{j=1}^{l}\left(\hat{y}_{j}^{k}-y_{j}\right)^{2} $$
+Iterative Equations1 #  隐层到输出层连接边权值变化
+$$ \Delta \omega_{h}=-\eta \frac{\partial E_{k}}{a \omega_{k j}} $$"><meta property="og:type" content="article"><meta property="og:url" content="/docs/notes/BackPropagation/"><meta property="article:section" content="docs"><meta property="article:modified_time" content="2021-05-14T22:57:37+08:00"><title>Back Propagation | Machine Learning Notes</title><link rel=manifest href=/manifest.json><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/book.min.e246e6a45b940b6ff71d8216783f10a80d910290a7c364c8bfd5d305d8545d62.css integrity="sha256-4kbmpFuUC2/3HYIWeD8QqA2RApCnw2TIv9XTBdhUXWI="><script defer src=/en.search.min.776eb9f30d0e47410f92c989b67fd6bba52bfb182590ff832d418b84b413c690.js integrity="sha256-d2658w0OR0EPksmJtn/Wu6Ur+xglkP+DLUGLhLQTxpA="></script><script defer src=/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js integrity="sha256-b2+Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC+NdcPIvZhzk="></script></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a href=/><img src=/logo.jpg alt=Logo><span>Machine Learning Notes</span></a></h2><div class=book-search><input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><ul><li class=book-section-flat><a href=/docs/notes/>Notes</a><ul><li><a href=/docs/notes/BackPropagation/ class=active>Back Propagation</a></li><li><a href=/docs/notes/Perceptron/>Perceptron</a></li></ul></li></ul><ul><li><a href=https://github.com/PorYoung/machine-learning-notes target=_blank rel=noopener>Github</a></li><li><a href=https://themes.gohugo.io/hugo-book/ target=_blank rel=noopener>Hugo Themes</a></li></ul></nav><script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Back Propagation</strong>
+<label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#backpropagation>BackPropagation</a><ul><li><a href=#single-hidden-layer-feedforward-neural-network>Single-hidden Layer Feedforward Neural Network</a></li><li><a href=#lossfunction>LossFunction</a></li><li><a href=#iterative-equations1>Iterative Equations</a></li><li><a href=#examples>Examples</a></li><li><a href=#code>Code</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=backpropagation>BackPropagation
+<a class=anchor href=#backpropagation>#</a></h1><link rel=stylesheet href=/katex/katex.min.css><script defer src=/katex/katex.min.js></script><script defer src=/katex/auto-render.min.js onload=renderMathInElement(document.body)></script><span>\(\)</span><h2 id=single-hidden-layer-feedforward-neural-network>Single-hidden Layer Feedforward Neural Network
+<a class=anchor href=#single-hidden-layer-feedforward-neural-network>#</a></h2><div class="book-columns flex flex-wrap"><div class="flex-even markdown-inner"><img src=https://i.loli.net/2021/05/14/DkUCvadouE8mQW7.png alt=newworks></div><div class="flex-even markdown-inner"><table><thead><tr><th></th><th>input</th><th>output</th></tr></thead><tbody><tr><td>output layer</td><td>$\beta_j=\sum_{h=1}^{q} \omega_{h j} b_{h}$</td><td>$\hat{y}_{j}^{k}=f\left(\beta_j-\theta_j\right)$</td></tr><tr><td>hidden layer</td><td>$\alpha_h=\sum_{i=1}^{d} v_{i h} x_{i}$</td><td>$b_{n}=f\left(\alpha_{i h}-\gamma_{h}\right)$</td></tr><tr><td>input layer</td><td>$x_i$</td><td>.</td></tr></tbody></table></div></div><h2 id=lossfunction>LossFunction
+<a class=anchor href=#lossfunction>#</a></h2><p>累计误差$E_k$，目标$min E_k$</p><p>$$
+E_{k}=\frac{1}{2} \sum_{j=1}^{l}\left(\hat{y}_{j}^{k}-y_{j}\right)^{2}
+$$</p><h2 id=iterative-equations1>Iterative Equations<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup>
+<a class=anchor href=#iterative-equations1>#</a></h2><p>隐层到输出层连接边权值变化</p><p>$$
+\Delta \omega_{h}=-\eta \frac{\partial E_{k}}{a \omega_{k j}}
+$$</p><p>$$
+\begin{aligned}
+\frac{\partial E_{k}}{\partial \omega_{h j}} &=\frac{\alpha E_{k}}{\partial \hat{y}_{j}^{k}} \cdot \frac{\partial \hat{y}_{j}^{k}}{\partial \beta_{j}} \cdot \frac{\partial \beta_{j}}{\partial \omega_{h j}} \newline
+&=\left(\hat{y}_{j}^{k}-y_{j}^{k}\right) f^{\prime}\left(\beta_{j}-\theta_{j}\right) \cdot b_{h}
+\end{aligned}
+$$</p><p>输出层阈值变化</p><p>$$
+\Delta \theta_{j}=-\eta \frac{\partial E_k}{\partial \theta_{j}}
+$$</p><p>$$
+\begin{aligned} \frac{\partial E_k}{\partial \theta_{j}} &=\frac{\partial E_{k}}{\partial \hat{y}_{j}^{k}} \cdot \frac{\partial \hat{y}_{j}^{k}}{\partial \theta_j} \newline
+&=\left(\hat{y}_{j}^{k}-y_{j}^{k}\right) \cdot f^{\prime}\left(\beta_{i}-\theta_{j}\right) \cdot(-1)=g_{j}
+\end{aligned}
+$$</p><p>输入层到隐层连接边权值变化</p><p>$$
+\Delta v_{i h}=-\eta \frac{\partial E k}{\partial V_{i h}}
+$$</p><p>$$
+\begin{aligned}
+\frac{\partial E_k}{\partial v_{i h}}&=\sum_{j=1}^{l} \frac{\alpha E_{k}}{\partial \hat{y}_{j}^{k}} \cdot \frac{\partial \hat{y}_{j}^{k}}{\partial \beta_{j}} \cdot \frac{\partial \beta_{j}}{\partial b_{h}} \cdot \frac{\partial b_{h}}{\partial \alpha_{h}} \cdot \frac{\partial \alpha_{h}}{\partial v_{i h}} \newline
+&=\sum_{j=1}^{k}\left(\hat{y}_{j}^{k}-y_{5}^{k}\right) \cdot f^{\prime}\left(\beta_{j}-\theta_{j}\right) \cdot \frac{\partial \beta_{j}}{\partial b_{j}} \cdot \frac{\partial b_{h}}{\partial \alpha_{h}} \cdot \frac{\partial \alpha_{h}}{\partial v_{i h}} \newline
+&=\left[\sum_{j=1}^{l}\left(\hat{y}_{j}^{k}-y_{j}^{k}\right) \cdot f^{\prime}\left(\beta_{j}-\theta_{j}\right) \cdot \omega_{h j}\right] \cdot \frac{\partial b_{h}}{\partial \alpha_{h}} \cdot \frac{\partial \alpha_{h}}{\partial v_{i h}}
+\end{aligned}
+$$</p><blockquote class="book-hint info">通常可以根据经验公式 $m=log_2 ( n )$， ( $m$为隐层节点数，$n$为输入层节点数 ) 得到隐层应节点数。</blockquote><h2 id=examples>Examples
+<a class=anchor href=#examples>#</a></h2><details><summary>Show an Example: fit $0.5*(cos(x)+1)$</summary><div class=markdown-inner><ul><li>测试</li><li><code>max_iter=10000, error=0.0001, same_error_times=10</code></li><li><code>iterated 10000/10000 times, error 0.2785599852590231.</code></li></ul><p><img src=https://i.loli.net/2021/05/14/JQSwWaP6RHD4Xn7.png alt=result></div></details><details><summary>Show an Example: fit $0.5*cos(x_1)*sin(x_2)$</summary><div class=markdown-inner><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> numpy <span style=color:#f92672>as</span> np
+<span style=color:#f92672>import</span> pandas <span style=color:#f92672>as</span> pd
+<span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#f92672>as</span> plt
+
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># 二维训练集样本</span>
+x <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array((np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>200</span>), np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>200</span>)))<span style=color:#f92672>.</span>T
+y <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>expand_dims((np<span style=color:#f92672>.</span>cos(x[:, <span style=color:#ae81ff>0</span>]) <span style=color:#f92672>+</span> np<span style=color:#f92672>.</span>sin(x[:, <span style=color:#ae81ff>1</span>])) <span style=color:#f92672>*</span> <span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>1</span>)
+bp <span style=color:#f92672>=</span> BackPropagation(q<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>, lr_1<span style=color:#f92672>=</span><span style=color:#ae81ff>0.5</span>, lr_2<span style=color:#f92672>=</span><span style=color:#ae81ff>0.6</span>)
+bp<span style=color:#f92672>.</span>fit(x, y, max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>1000</span>, error<span style=color:#f92672>=</span><span style=color:#ae81ff>0.0001</span>, same_error_times<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+
+</code></pre></div><pre><code>iterated 1000/1000 times, error is 19.441564975483463, covergent 1 times.
+</code></pre><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>ax <span style=color:#f92672>=</span> plt<span style=color:#f92672>.</span>subplot(<span style=color:#ae81ff>111</span>, projection<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;3d&#34;</span>)
+ax<span style=color:#f92672>.</span>plot3D(x[:, <span style=color:#ae81ff>0</span>], x[:, <span style=color:#ae81ff>1</span>], y[:, <span style=color:#ae81ff>0</span>], c<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;w&#34;</span>)
+ax<span style=color:#f92672>.</span>plot3D(x_test[:, <span style=color:#ae81ff>0</span>], x_test[:, <span style=color:#ae81ff>1</span>], Y_Y[:, <span style=color:#ae81ff>0</span>], c<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;b&#34;</span>)
+
+
+</code></pre></div><pre><code>[&lt;mpl_toolkits.mplot3d.art3d.Line3D at 0x7fb286c26340&gt;]
+</code></pre><p><img src=BP_test_files/BP_test_2_1.svg alt=svg></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># 二维训练集样本</span>
+x <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array((np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>200</span>), np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>200</span>)))<span style=color:#f92672>.</span>T
+y <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>expand_dims((np<span style=color:#f92672>.</span>cos(x[:, <span style=color:#ae81ff>0</span>]) <span style=color:#f92672>+</span> np<span style=color:#f92672>.</span>sin(x[:, <span style=color:#ae81ff>1</span>])) <span style=color:#f92672>*</span> <span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>1</span>)
+bp <span style=color:#f92672>=</span> BackPropagation(q<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>, lr_1<span style=color:#f92672>=</span><span style=color:#ae81ff>0.8</span>, lr_2<span style=color:#f92672>=</span><span style=color:#ae81ff>0.6</span>)
+bp<span style=color:#f92672>.</span>fit(x, y, max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>1000</span>, error<span style=color:#f92672>=</span><span style=color:#ae81ff>0.0001</span>, same_error_times<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+
+</code></pre></div><pre><code>iterated 568/1000 times, error is 14.466125682677891, covergent 9 times.
+</code></pre><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># 二维测试集样本</span>
+x_test <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array((np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>200</span>), np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>200</span>)))<span style=color:#f92672>.</span>T
+Y_Y <span style=color:#f92672>=</span> bp<span style=color:#f92672>.</span>predict(x_test)
+
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>ax <span style=color:#f92672>=</span> plt<span style=color:#f92672>.</span>subplot(<span style=color:#ae81ff>111</span>, projection<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;3d&#34;</span>)
+ax<span style=color:#f92672>.</span>plot3D(x[:, <span style=color:#ae81ff>0</span>], x[:, <span style=color:#ae81ff>1</span>], y[:, <span style=color:#ae81ff>0</span>], c<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;w&#34;</span>)
+ax<span style=color:#f92672>.</span>plot3D(x_test[:, <span style=color:#ae81ff>0</span>], x_test[:, <span style=color:#ae81ff>1</span>], Y_Y[:, <span style=color:#ae81ff>0</span>], c<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;b&#34;</span>)
+
+
+</code></pre></div><pre><code>[&lt;mpl_toolkits.mplot3d.art3d.Line3D at 0x7fb286b2af70&gt;]
+</code></pre><p><img src=BP_test_files/BP_test_5_1.svg alt=svg></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>start_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+bp<span style=color:#f92672>.</span>fit(
+    x,
+    y,
+    max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>1000000</span>,
+    error<span style=color:#f92672>=</span><span style=color:#ae81ff>0.00001</span>,
+    same_error_times<span style=color:#f92672>=</span><span style=color:#ae81ff>200</span>,
+    Rh<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Rh,
+    Thej<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Thej,
+    Vih<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Vih,
+    Whj<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Whj,
+)
+end_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;training costs {} s&#34;</span><span style=color:#f92672>.</span>format(end_time <span style=color:#f92672>-</span> start_time))
+
+</code></pre></div><pre><code>iterated 21841/1000000 times, error is 13.866926271017798, covergent 199 times.
+training costs 573.6911239624023 s
+</code></pre><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># 二维测试集样本</span>
+x_test <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array((np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>200</span>), np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>200</span>)))<span style=color:#f92672>.</span>T
+Y_Y <span style=color:#f92672>=</span> bp<span style=color:#f92672>.</span>predict(x_test)
+
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>ax <span style=color:#f92672>=</span> plt<span style=color:#f92672>.</span>subplot(<span style=color:#ae81ff>111</span>, projection<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;3d&#34;</span>)
+ax<span style=color:#f92672>.</span>plot3D(x[:, <span style=color:#ae81ff>0</span>], x[:, <span style=color:#ae81ff>1</span>], y[:, <span style=color:#ae81ff>0</span>], c<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;w&#34;</span>)
+ax<span style=color:#f92672>.</span>plot3D(x_test[:, <span style=color:#ae81ff>0</span>], x_test[:, <span style=color:#ae81ff>1</span>], Y_Y[:, <span style=color:#ae81ff>0</span>], c<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;b&#34;</span>)
+
+
+</code></pre></div><pre><code>[&lt;mpl_toolkits.mplot3d.art3d.Line3D at 0x7fb28699fcd0&gt;]
+</code></pre><p><img src=BP_test_files/BP_test_8_1.svg alt=svg></p></div></details><h2 id=code>Code
+<a class=anchor href=#code>#</a></h2><details><summary>Show Code</summary><div class=markdown-inner><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e>#%%</span>
+<span style=color:#f92672>import</span> numpy <span style=color:#f92672>as</span> np
+<span style=color:#f92672>import</span> pandas <span style=color:#f92672>as</span> pd
+<span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#f92672>as</span> plt
+
+<span style=color:#75715e># %%</span>
+path <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;/home/ias/workdir/ml-primary/ml-notes/data/watermelon_data3.0.csv&#34;</span>
+data <span style=color:#f92672>=</span> pd<span style=color:#f92672>.</span>read_csv(path)
+data<span style=color:#f92672>.</span>head()
+
+<span style=color:#75715e># %%</span>
+<span style=color:#f92672>from</span> sklearn <span style=color:#f92672>import</span> preprocessing
+
+enc <span style=color:#f92672>=</span> preprocessing<span style=color:#f92672>.</span>OneHotEncoder()
+a <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(enc<span style=color:#f92672>.</span>fit_transform(data<span style=color:#f92672>.</span>iloc[:, :<span style=color:#ae81ff>7</span>])<span style=color:#f92672>.</span>toarray())
+b <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(data<span style=color:#f92672>.</span>iloc[:, <span style=color:#ae81ff>7</span>:<span style=color:#ae81ff>9</span>])
+X <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>c_[a, b]
+y <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(enc<span style=color:#f92672>.</span>fit_transform(data<span style=color:#f92672>.</span>iloc[:, <span style=color:#ae81ff>9</span>:])<span style=color:#f92672>.</span>toarray())
+
+<span style=color:#75715e>#%%</span>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BackPropagation</span>:
+    <span style=color:#66d9ef>def</span> __init__(self, q<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, lr_1<span style=color:#f92672>=</span><span style=color:#ae81ff>0.1</span>, lr_2<span style=color:#f92672>=</span><span style=color:#ae81ff>0.1</span>) <span style=color:#f92672>-&gt;</span> None:
+        self<span style=color:#f92672>.</span>q <span style=color:#f92672>=</span> q
+        self<span style=color:#f92672>.</span>lr_1 <span style=color:#f92672>=</span> lr_1
+        self<span style=color:#f92672>.</span>lr_2 <span style=color:#f92672>=</span> lr_2
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>sigmoid</span>(self, v, the):
+        <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>/</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>+</span> np<span style=color:#f92672>.</span>exp(<span style=color:#f92672>-</span>(v <span style=color:#f92672>-</span> the)))
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>fit</span>(
+        self,
+        X,
+        Y,
+        max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>50</span>,
+        error<span style=color:#f92672>=</span><span style=color:#ae81ff>0.001</span>,
+        same_error_times<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>,
+        Rh<span style=color:#f92672>=</span>None,
+        Thej<span style=color:#f92672>=</span>None,
+        Vih<span style=color:#f92672>=</span>None,
+        Whj<span style=color:#f92672>=</span>None,
+    ):
+        <span style=color:#e6db74>&#34;&#34;&#34;fit AI is creating summary for fit
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>        Args:
+</span><span style=color:#e6db74>            X ([type]): [N * d]
+</span><span style=color:#e6db74>            Y ([type]): [N * m]
+</span><span style=color:#e6db74>            max_iter (int, optional): [description]. Defaults to 50.
+</span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
+        <span style=color:#75715e># init</span>
+        N, d <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>shape(X)
+        m <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>shape(Y)[<span style=color:#ae81ff>1</span>]
+        Rh <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>random<span style=color:#f92672>.</span>random(self<span style=color:#f92672>.</span>q) <span style=color:#66d9ef>if</span> Rh <span style=color:#f92672>is</span> None <span style=color:#66d9ef>else</span> Rh
+        Thej <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>random<span style=color:#f92672>.</span>random(m) <span style=color:#66d9ef>if</span> Thej <span style=color:#f92672>is</span> None <span style=color:#66d9ef>else</span> Thej
+        Vih <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>random<span style=color:#f92672>.</span>random((d, self<span style=color:#f92672>.</span>q)) <span style=color:#66d9ef>if</span> Vih <span style=color:#f92672>is</span> None <span style=color:#66d9ef>else</span> Vih
+        Whj <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>random<span style=color:#f92672>.</span>random((self<span style=color:#f92672>.</span>q, m)) <span style=color:#66d9ef>if</span> Whj <span style=color:#f92672>is</span> None <span style=color:#66d9ef>else</span> Whj
+
+        error_list <span style=color:#f92672>=</span> []
+        old_Ek <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        cur <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        sn <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        <span style=color:#66d9ef>while</span> cur <span style=color:#f92672>&lt;</span> max_iter:
+            Ek <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(N)
+            <span style=color:#66d9ef>for</span> k <span style=color:#f92672>in</span> range(N):
+                <span style=color:#75715e># calculate Bh</span>
+                Ah <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(self<span style=color:#f92672>.</span>q)
+                Bh <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(self<span style=color:#f92672>.</span>q)
+                <span style=color:#66d9ef>for</span> h <span style=color:#f92672>in</span> range(self<span style=color:#f92672>.</span>q):
+                    Ah[h] <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>dot(X[k], Vih[:, h])
+                    Bh[h] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>sigmoid(Ah[h], Rh[h])
+                <span style=color:#75715e># calculate Yj</span>
+                Pj <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(m)
+                Yj <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(m)
+                Gj <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(m)
+                <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(m):
+                    Pj[j] <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>dot(Bh, Whj[:, j])
+                    Yj[j] <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>sigmoid(Pj[j], Thej[j])
+                    <span style=color:#75715e># calculate Gj</span>
+                    Gj[j] <span style=color:#f92672>=</span> Yj[j] <span style=color:#f92672>*</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>-</span> Yj[j]) <span style=color:#f92672>*</span> (Y[k][j] <span style=color:#f92672>-</span> Yj[j])
+                <span style=color:#75715e># calculate Eh</span>
+                Eh <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(self<span style=color:#f92672>.</span>q)
+                <span style=color:#66d9ef>for</span> h <span style=color:#f92672>in</span> range(self<span style=color:#f92672>.</span>q):
+                    Eh[h] <span style=color:#f92672>=</span> Bh[h] <span style=color:#f92672>*</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>-</span> Bh[h]) <span style=color:#f92672>*</span> np<span style=color:#f92672>.</span>dot(Gj, Whj[h, :])
+                <span style=color:#75715e># update</span>
+                Whj <span style=color:#f92672>+=</span> self<span style=color:#f92672>.</span>lr_1 <span style=color:#f92672>*</span> np<span style=color:#f92672>.</span>reshape(np<span style=color:#f92672>.</span>kron(Bh, Gj), (self<span style=color:#f92672>.</span>q, m))
+                Vih <span style=color:#f92672>+=</span> self<span style=color:#f92672>.</span>lr_2 <span style=color:#f92672>*</span> np<span style=color:#f92672>.</span>reshape(np<span style=color:#f92672>.</span>kron(X[k], Eh), (d, self<span style=color:#f92672>.</span>q))
+                Thej <span style=color:#f92672>+=</span> <span style=color:#f92672>-</span>self<span style=color:#f92672>.</span>lr_1 <span style=color:#f92672>*</span> Gj
+                Rh <span style=color:#f92672>+=</span> <span style=color:#f92672>-</span>self<span style=color:#f92672>.</span>lr_2 <span style=color:#f92672>*</span> Eh
+                <span style=color:#75715e># calculate Ek</span>
+                Ek[k] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.5</span> <span style=color:#f92672>*</span> np<span style=color:#f92672>.</span>sum(np<span style=color:#f92672>.</span>power(Yj <span style=color:#f92672>-</span> Y[k], <span style=color:#ae81ff>2</span>))
+            <span style=color:#66d9ef>if</span> abs(old_Ek <span style=color:#f92672>-</span> sum(Ek)) <span style=color:#f92672>&lt;</span> error:
+                sn <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+                <span style=color:#66d9ef>if</span> sn <span style=color:#f92672>&gt;=</span> same_error_times:
+                    <span style=color:#66d9ef>break</span>
+            <span style=color:#66d9ef>else</span>:
+                old_Ek <span style=color:#f92672>=</span> sum(Ek)
+                error_list<span style=color:#f92672>.</span>append(old_Ek)
+                sn <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+            cur <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+            <span style=color:#66d9ef>print</span>(
+                <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\r</span><span style=color:#e6db74>iterated {}/{} times, error is {}, covergent {} times.&#34;</span><span style=color:#f92672>.</span>format(
+                    cur, max_iter, old_Ek, sn
+                ),
+                end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&#34;</span>,
+            )
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;&#34;</span>, end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+        <span style=color:#66d9ef>print</span>(
+            <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\r</span><span style=color:#e6db74> Finished, iterated {}/{} times, error is {}, covergent {} times.&#34;</span><span style=color:#f92672>.</span>format(
+                cur, max_iter, old_Ek, sn
+            ),
+            end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&#34;</span>,
+        )
+        self<span style=color:#f92672>.</span>Rh <span style=color:#f92672>=</span> Rh
+        self<span style=color:#f92672>.</span>Thej <span style=color:#f92672>=</span> Thej
+        self<span style=color:#f92672>.</span>Vih <span style=color:#f92672>=</span> Vih
+        self<span style=color:#f92672>.</span>Whj <span style=color:#f92672>=</span> Whj
+        self<span style=color:#f92672>.</span>error_list <span style=color:#f92672>=</span> error_list
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>predict</span>(self, x_test):
+        Y_Y <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros((np<span style=color:#f92672>.</span>shape(x_test)[<span style=color:#ae81ff>0</span>], np<span style=color:#f92672>.</span>shape(self<span style=color:#f92672>.</span>Whj)[<span style=color:#ae81ff>1</span>]))
+        <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(len(x_test)):
+            A_H <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>dot(x_test[i], self<span style=color:#f92672>.</span>Vih)
+            B_V <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(
+                [self<span style=color:#f92672>.</span>sigmoid(A_H[h], self<span style=color:#f92672>.</span>Rh[h]) <span style=color:#66d9ef>for</span> h <span style=color:#f92672>in</span> range(len(A_H))]
+            )
+            P_J <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>dot(B_V, self<span style=color:#f92672>.</span>Whj)
+            Y_O <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(
+                [self<span style=color:#f92672>.</span>sigmoid(P_J[j], self<span style=color:#f92672>.</span>Thej[j]) <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(len(P_J))]
+            )
+            Y_Y[i] <span style=color:#f92672>=</span> Y_O
+        <span style=color:#66d9ef>return</span> Y_Y
+
+
+<span style=color:#75715e># %%</span>
+<span style=color:#75715e># 训练集样本</span>
+x <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array([np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>200</span>)])<span style=color:#f92672>.</span>T
+y <span style=color:#f92672>=</span> (np<span style=color:#f92672>.</span>cos(x) <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>/</span> <span style=color:#ae81ff>2</span>
+bp <span style=color:#f92672>=</span> BackPropagation(q<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>, lr_1<span style=color:#f92672>=</span><span style=color:#ae81ff>0.3</span>)
+bp<span style=color:#f92672>.</span>fit(x, y, max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>1000</span>, error<span style=color:#f92672>=</span><span style=color:#ae81ff>0.0001</span>, same_error_times<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>)
+
+<span style=color:#75715e># %%</span>
+<span style=color:#75715e># 测试集样本</span>
+x_test <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array([np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>120</span>)])<span style=color:#f92672>.</span>T
+<span style=color:#75715e># 测试集结果</span>
+<span style=color:#75715e># y_predict = network.feedforward(x_test)</span>
+Y_Y <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(len(x_test))
+<span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(len(x_test)):
+    A_H <span style=color:#f92672>=</span> x_test[i] <span style=color:#f92672>*</span> bp<span style=color:#f92672>.</span>Vih
+    B_V <span style=color:#f92672>=</span> [bp<span style=color:#f92672>.</span>sigmoid(v, bp<span style=color:#f92672>.</span>Rh) <span style=color:#66d9ef>for</span> v <span style=color:#f92672>in</span> A_H]
+    Y_M <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>shape(bp<span style=color:#f92672>.</span>Whj)[<span style=color:#ae81ff>1</span>]
+    Y_J <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(Y_M)
+    Y_O <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(Y_M)
+    <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(Y_M):
+        Y_J[j] <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>dot(B_V, bp<span style=color:#f92672>.</span>Whj[:, j])
+        Y_O[j] <span style=color:#f92672>=</span> bp<span style=color:#f92672>.</span>sigmoid(Y_J[j], bp<span style=color:#f92672>.</span>Thej[j])
+    Y_Y[i] <span style=color:#f92672>=</span> Y_O
+
+<span style=color:#75715e># %%</span>
+nbp <span style=color:#f92672>=</span> BackPropagation(q<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>, lr_1<span style=color:#f92672>=</span><span style=color:#ae81ff>0.3</span>)
+nbp<span style=color:#f92672>.</span>fit(
+    x,
+    y,
+    max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>1000</span>,
+    error<span style=color:#f92672>=</span><span style=color:#ae81ff>0.0001</span>,
+    same_error_times<span style=color:#f92672>=</span><span style=color:#ae81ff>10</span>,
+    Rh<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Rh,
+    Thej<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Thej,
+    Vih<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Vih,
+    Whj<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Whj,
+)
+x_test <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array([np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>120</span>)])<span style=color:#f92672>.</span>T
+Y_Y <span style=color:#f92672>=</span> nbp<span style=color:#f92672>.</span>predict(x_test)
+
+plt<span style=color:#f92672>.</span>plot(x, y, <span style=color:#e6db74>&#34;r&#34;</span>, x_test, Y_Y, <span style=color:#e6db74>&#34;*&#34;</span>)
+<span style=color:#75715e># %%</span>
+<span style=color:#75715e># 二维训练集样本</span>
+<span style=color:#f92672>import</span> time
+
+start_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+
+x <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array((np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>200</span>), np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>200</span>)))<span style=color:#f92672>.</span>T
+y <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>expand_dims((np<span style=color:#f92672>.</span>cos(x[:, <span style=color:#ae81ff>0</span>]) <span style=color:#f92672>+</span> np<span style=color:#f92672>.</span>sin(x[:, <span style=color:#ae81ff>1</span>])) <span style=color:#f92672>*</span> <span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>1</span>)
+bp <span style=color:#f92672>=</span> BackPropagation(q<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>, lr_1<span style=color:#f92672>=</span><span style=color:#ae81ff>0.8</span>, lr_2<span style=color:#f92672>=</span><span style=color:#ae81ff>0.4</span>)
+bp<span style=color:#f92672>.</span>fit(x, y, max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>1000000</span>, error<span style=color:#f92672>=</span><span style=color:#ae81ff>0.0001</span>, same_error_times<span style=color:#f92672>=</span><span style=color:#ae81ff>100</span>)
+
+end_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;training costs {} s&#34;</span><span style=color:#f92672>.</span>format(end_time <span style=color:#f92672>-</span> start_time))
+
+<span style=color:#75715e># %%</span>
+<span style=color:#75715e># 二维测试集样本</span>
+x_test <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array((np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>200</span>), np<span style=color:#f92672>.</span>linspace(<span style=color:#f92672>-</span><span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>9</span>, <span style=color:#ae81ff>200</span>)))<span style=color:#f92672>.</span>T
+Y_Y <span style=color:#f92672>=</span> bp<span style=color:#f92672>.</span>predict(x_test)
+
+<span style=color:#75715e># %%</span>
+ax <span style=color:#f92672>=</span> plt<span style=color:#f92672>.</span>subplot(<span style=color:#ae81ff>111</span>, projection<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;3d&#34;</span>)
+ax<span style=color:#f92672>.</span>plot3D(x[:, <span style=color:#ae81ff>0</span>], x[:, <span style=color:#ae81ff>1</span>], y[:, <span style=color:#ae81ff>0</span>], c<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;w&#34;</span>)
+ax<span style=color:#f92672>.</span>plot3D(x_test[:, <span style=color:#ae81ff>0</span>], x_test[:, <span style=color:#ae81ff>1</span>], Y_Y[:, <span style=color:#ae81ff>0</span>], c<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;b&#34;</span>)
+
+
+<span style=color:#75715e># %%</span>
+start_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+nbp <span style=color:#f92672>=</span> BackPropagation(q<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>, lr_1<span style=color:#f92672>=</span><span style=color:#ae81ff>0.3</span>, lr_2<span style=color:#f92672>=</span><span style=color:#ae81ff>0.1</span>)
+nbp<span style=color:#f92672>.</span>fit(
+    x,
+    y,
+    max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>1000000</span>,
+    error<span style=color:#f92672>=</span><span style=color:#ae81ff>0.00001</span>,
+    same_error_times<span style=color:#f92672>=</span><span style=color:#ae81ff>200</span>,
+    Rh<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Rh,
+    Thej<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Thej,
+    Vih<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Vih,
+    Whj<span style=color:#f92672>=</span>bp<span style=color:#f92672>.</span>Whj,
+)
+end_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;training costs {} s&#34;</span><span style=color:#f92672>.</span>format(end_time <span style=color:#f92672>-</span> start_time))
+
+<span style=color:#75715e># %%</span>
+
+</code></pre></div></div></details><section class=footnotes role=doc-endnotes><hr><ol><li id=fn:1 role=doc-endnote><p><a href=https://datawhalechina.github.io/pumpkin-book/#/chapter5/chapter5>南瓜书 PumpkinBook</a>&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p></li></ol></section></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/PorYoung/machine-learning-notes/commit/27874b0337961ff44803e94e3a5ee10c05a73b41 title="Last modified by PorYoung | May 14, 2021" target=_blank rel=noopener><img src=/svg/calendar.svg class=book-icon alt=Calendar>
+<span>May 14, 2021</span></a></div><div><a class="flex align-center" href=https://github.com/PorYoung/machine-learning-notes/./content/docs/notes/BackPropagation.md target=_blank rel=noopener><img src=/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div></div><script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script></footer><div class=book-comments></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><a href=#backpropagation>BackPropagation</a><ul><li><a href=#single-hidden-layer-feedforward-neural-network>Single-hidden Layer Feedforward Neural Network</a></li><li><a href=#lossfunction>LossFunction</a></li><li><a href=#iterative-equations1>Iterative Equations</a></li><li><a href=#examples>Examples</a></li><li><a href=#code>Code</a></li></ul></li></ul></nav></div></aside></main></body></html>

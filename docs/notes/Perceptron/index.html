@@ -1,0 +1,345 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Perceptron #     \(\)  Perceptron is a kind of binary classification model.
+ Loss Function #  $$ L ( \omega, b ) =\sum_{i \in M}-y_{i} \frac{\left|\omega x_{i}+b\right|}{|\omega|} $$
+Target #  $$ \min L ( \omega, b ) $$
+Method #  随机梯度下降法 #  目标梯度
+$$ \nabla_{\omega} L=-\sum_{x_{i} \in M} y_{i} x_{i} $$
+$$ \nabla_{b} L=-\sum_{x_{i} \in M} y_{i} $$
+选取初值$\omega_0$, $b_0$
+迭代式
+$$ \omega \leftarrow \omega+\eta \cdot y_{i} x_{i} $$"><meta name=theme-color content="#FFFFFF"><meta property="og:title" content><meta property="og:description" content="Perceptron #     \(\)  Perceptron is a kind of binary classification model.
+ Loss Function #  $$ L ( \omega, b ) =\sum_{i \in M}-y_{i} \frac{\left|\omega x_{i}+b\right|}{|\omega|} $$
+Target #  $$ \min L ( \omega, b ) $$
+Method #  随机梯度下降法 #  目标梯度
+$$ \nabla_{\omega} L=-\sum_{x_{i} \in M} y_{i} x_{i} $$
+$$ \nabla_{b} L=-\sum_{x_{i} \in M} y_{i} $$
+选取初值$\omega_0$, $b_0$
+迭代式
+$$ \omega \leftarrow \omega+\eta \cdot y_{i} x_{i} $$"><meta property="og:type" content="article"><meta property="og:url" content="/docs/notes/Perceptron/"><meta property="article:section" content="docs"><meta property="article:modified_time" content="2021-05-14T21:40:08+08:00"><title>Perceptron | Machine Learning Notes</title><link rel=manifest href=/manifest.json><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/book.min.e246e6a45b940b6ff71d8216783f10a80d910290a7c364c8bfd5d305d8545d62.css integrity="sha256-4kbmpFuUC2/3HYIWeD8QqA2RApCnw2TIv9XTBdhUXWI="><script defer src=/en.search.min.776eb9f30d0e47410f92c989b67fd6bba52bfb182590ff832d418b84b413c690.js integrity="sha256-d2658w0OR0EPksmJtn/Wu6Ur+xglkP+DLUGLhLQTxpA="></script><script defer src=/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js integrity="sha256-b2+Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC+NdcPIvZhzk="></script></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a href=/><img src=/logo.jpg alt=Logo><span>Machine Learning Notes</span></a></h2><div class=book-search><input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><ul><li class=book-section-flat><a href=/docs/notes/>Notes</a><ul><li><a href=/docs/notes/BackPropagation/>Back Propagation</a></li><li><a href=/docs/notes/Perceptron/ class=active>Perceptron</a></li></ul></li></ul><ul><li><a href=https://github.com/PorYoung/machine-learning-notes target=_blank rel=noopener>Github</a></li><li><a href=https://themes.gohugo.io/hugo-book/ target=_blank rel=noopener>Hugo Themes</a></li></ul></nav><script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>Perceptron</strong>
+<label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#perceptron>Perceptron</a><ul><li><a href=#loss-function>Loss Function</a></li><li><a href=#target>Target</a></li><li><a href=#method>Method</a><ul><li><a href=#随机梯度下降法>随机梯度下降法</a></li></ul></li><li><a href=#convergence>Convergence</a></li><li><a href=#form-of-duality>Form of duality</a></li><li><a href=#example>Example</a></li><li><a href=#code>Code</a></li></ul></li></ul></nav></aside></header><article class=markdown><h1 id=perceptron>Perceptron
+<a class=anchor href=#perceptron>#</a></h1><p><link rel=stylesheet href=/katex/katex.min.css><script defer src=/katex/katex.min.js></script><script defer src=/katex/auto-render.min.js onload=renderMathInElement(document.body)></script><span>\(\)</span>
+Perceptron is a kind of binary classification model.</p><h2 id=loss-function>Loss Function
+<a class=anchor href=#loss-function>#</a></h2><p>$$
+L ( \omega, b ) =\sum_{i \in M}-y_{i} \frac{\left|\omega x_{i}+b\right|}{|\omega|}
+$$</p><h2 id=target>Target
+<a class=anchor href=#target>#</a></h2><p>$$
+\min L ( \omega, b )
+$$</p><h2 id=method>Method
+<a class=anchor href=#method>#</a></h2><h3 id=随机梯度下降法>随机梯度下降法
+<a class=anchor href=#%e9%9a%8f%e6%9c%ba%e6%a2%af%e5%ba%a6%e4%b8%8b%e9%99%8d%e6%b3%95>#</a></h3><p>目标梯度</p><p>$$
+\nabla_{\omega} L=-\sum_{x_{i} \in M} y_{i} x_{i}
+$$</p><p>$$
+\nabla_{b} L=-\sum_{x_{i} \in M} y_{i}
+$$</p><p>选取初值$\omega_0$, $b_0$</p><p>迭代式</p><p>$$
+\omega \leftarrow \omega+\eta \cdot y_{i} x_{i}
+$$</p><p>$$
+b \leftarrow b+\eta \cdot y_{i} x_{i}
+$$</p><p>初值选取和迭代过程误分类点选取不同，结果不同。</p><h2 id=convergence>Convergence
+<a class=anchor href=#convergence>#</a></h2><p>存在$\gamma>0$，有</p><p>$$
+y_{i}\left ( \omega_{opt} \cdot x_{i}+b_{opt}\right ) \geqslant \gamma
+$$</p><p>感知机学习算法收敛，$R=\max_{1 \leqslant i \leqslant N}\left|x*{i}\right|$，对误分类次数$k$，有</p><p>$$
+k \leq\left ( \frac{R}{\gamma}\right )^{2}
+$$</p><h2 id=form-of-duality>Form of duality
+<a class=anchor href=#form-of-duality>#</a></h2><p>取初值：$\omega=\mathit{0}, \alpha=\mathit{0}, b=\mathit{0}$</p><p>学习到的$\omega$和$b$的形式为</p><p>$$
+\omega=\sum_{i=1}^{N} \alpha_{i} \mathcal{y}_{i} x_{i}
+$$</p><p>$$
+b=\sum_{i=1}^{N} \alpha_{i} x_{i}
+$$</p><p>误分类判据变为</p><p>$$
+y_{i}\left(\sum_{j=1}^{N} \alpha_{j} y_{i} x_{j} \cdot x_{i}+b\right) \leq 0
+$$</p><p>迭代式</p><p>$$
+\alpha_{i} \leftarrow \alpha_{i}+\eta
+$$</p><p>$$
+b_{i} \leftarrow b+\eta y_{i}
+$$</p><p>$Gram$矩阵 $= \left[x_{i} \cdot x_{j}\right]_{N \times N}$</p><h2 id=example>Example
+<a class=anchor href=#example>#</a></h2><details><summary>Show an Example: fit iris data</summary><div class=markdown-inner><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> typing <span style=color:#f92672>import</span> Tuple
+<span style=color:#f92672>import</span> numpy <span style=color:#f92672>as</span> np
+<span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#f92672>as</span> plt
+<span style=color:#f92672>import</span> time
+
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Perceptron</span>:
+    <span style=color:#66d9ef>def</span> __init__(self, l_r<span style=color:#f92672>=</span><span style=color:#ae81ff>0.1</span>) <span style=color:#f92672>-&gt;</span> None:
+        self<span style=color:#f92672>.</span>w <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        self<span style=color:#f92672>.</span>b <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        self<span style=color:#f92672>.</span>l_r <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.1</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>sign</span>(self, x):
+        <span style=color:#66d9ef>return</span> np<span style=color:#f92672>.</span>sign(np<span style=color:#f92672>.</span>dot(self<span style=color:#f92672>.</span>w, x) <span style=color:#f92672>+</span> self<span style=color:#f92672>.</span>b)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>fit</span>(self, X, Y, iter<span style=color:#f92672>=</span><span style=color:#ae81ff>50</span>, w<span style=color:#f92672>=</span>None, b<span style=color:#f92672>=</span>None, l_r<span style=color:#f92672>=</span>None):
+        <span style=color:#66d9ef>if</span> w <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            <span style=color:#66d9ef>if</span> np<span style=color:#f92672>.</span>shape(X)[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> len(w):
+                self<span style=color:#f92672>.</span>w <span style=color:#f92672>=</span> w
+            <span style=color:#66d9ef>else</span>:
+                <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>ValueError</span>(
+                    <span style=color:#e6db74>&#34;dimesion of w {} differs from X {}.&#34;</span><span style=color:#f92672>.</span>format(
+                        len(w), np<span style=color:#f92672>.</span>shape(X)[<span style=color:#ae81ff>1</span>]
+                    )
+                )
+        <span style=color:#66d9ef>else</span>:
+            self<span style=color:#f92672>.</span>w <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(np<span style=color:#f92672>.</span>shape(X)[<span style=color:#ae81ff>1</span>])
+        <span style=color:#66d9ef>if</span> b <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            self<span style=color:#f92672>.</span>b <span style=color:#f92672>=</span> b
+        <span style=color:#66d9ef>if</span> l_r <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            self<span style=color:#f92672>.</span>l_r <span style=color:#f92672>=</span> l_r
+
+        cur <span style=color:#f92672>=</span> wrong_times <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        <span style=color:#66d9ef>while</span> cur <span style=color:#f92672>&lt;</span> iter:
+            id <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+            <span style=color:#66d9ef>while</span> id <span style=color:#f92672>&lt;</span> len(X):
+                <span style=color:#66d9ef>if</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> <span style=color:#f92672>*</span> Y[id] <span style=color:#f92672>*</span> self<span style=color:#f92672>.</span>sign(X[id]) <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>0</span>:
+                    self<span style=color:#f92672>.</span>w <span style=color:#f92672>+=</span> self<span style=color:#f92672>.</span>l_r <span style=color:#f92672>*</span> np<span style=color:#f92672>.</span>dot(Y[id], X[id])
+                    self<span style=color:#f92672>.</span>b <span style=color:#f92672>+=</span> self<span style=color:#f92672>.</span>l_r <span style=color:#f92672>*</span> Y[id]
+                    wrong_times <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+                id <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+            cur <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+            <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\r</span><span style=color:#e6db74>iterated {}/{} times.&#34;</span><span style=color:#f92672>.</span>format(cur, iter), end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&#34;</span>)
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;&#34;</span>, end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+        <span style=color:#66d9ef>print</span>(
+            <span style=color:#e6db74>&#34;w {}, b {}, learning_rate {}, wrong times {}&#34;</span><span style=color:#f92672>.</span>format(
+                self<span style=color:#f92672>.</span>w, self<span style=color:#f92672>.</span>b, self<span style=color:#f92672>.</span>l_r, wrong_times
+            )
+        )
+
+
+<span style=color:#75715e>################################################################################</span>
+<span style=color:#75715e># MNIST Data</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>load_sk_data</span>():
+    <span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#f92672>as</span> plt
+    <span style=color:#f92672>import</span> pandas <span style=color:#f92672>as</span> pd
+    <span style=color:#f92672>from</span> sklearn.datasets <span style=color:#f92672>import</span> load_iris
+
+    <span style=color:#75715e># load data</span>
+    iris <span style=color:#f92672>=</span> load_iris()
+    df <span style=color:#f92672>=</span> pd<span style=color:#f92672>.</span>DataFrame(iris<span style=color:#f92672>.</span>data, columns<span style=color:#f92672>=</span>iris<span style=color:#f92672>.</span>feature_names)
+    df[<span style=color:#e6db74>&#34;label&#34;</span>] <span style=color:#f92672>=</span> iris<span style=color:#f92672>.</span>target
+    df<span style=color:#f92672>.</span>columns <span style=color:#f92672>=</span> [
+        <span style=color:#e6db74>&#34;sepal length&#34;</span>,
+        <span style=color:#e6db74>&#34;sepal width&#34;</span>,
+        <span style=color:#e6db74>&#34;petal length&#34;</span>,
+        <span style=color:#e6db74>&#34;petal width&#34;</span>,
+        <span style=color:#e6db74>&#34;label&#34;</span>,
+    ]
+    df<span style=color:#f92672>.</span>label<span style=color:#f92672>.</span>value_counts()
+    data <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(df<span style=color:#f92672>.</span>iloc[:<span style=color:#ae81ff>100</span>, [<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]])
+    X, y <span style=color:#f92672>=</span> data[:, :<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>], data[:, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]
+    Y <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array([<span style=color:#ae81ff>1</span> <span style=color:#66d9ef>if</span> i <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>else</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> y])
+    <span style=color:#66d9ef>return</span> X, Y, data
+
+
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># load sk data</span>
+X, Y, data <span style=color:#f92672>=</span> load_sk_data()
+
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># train on sk data</span>
+start_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+pc <span style=color:#f92672>=</span> Perceptron()
+pc<span style=color:#f92672>.</span>fit(X, Y, <span style=color:#ae81ff>200</span>)
+end_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;training costs {} s&#34;</span><span style=color:#f92672>.</span>format(end_time <span style=color:#f92672>-</span> start_time))
+
+</code></pre></div><pre><code>iterated 200/200 times.
+w [ 5.36 -8.13], b -4.000000000000002, learning_rate 0.1, wrong times 440
+training costs 0.33515477180480957 s
+</code></pre><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python>x_ <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>linspace(<span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>10</span>)
+y_ <span style=color:#f92672>=</span> <span style=color:#f92672>-</span>(pc<span style=color:#f92672>.</span>w[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>*</span> x_ <span style=color:#f92672>+</span> pc<span style=color:#f92672>.</span>b) <span style=color:#f92672>/</span> pc<span style=color:#f92672>.</span>w[<span style=color:#ae81ff>1</span>]
+
+plt<span style=color:#f92672>.</span>plot(x_, y_)
+plt<span style=color:#f92672>.</span>plot(data[:<span style=color:#ae81ff>50</span>, <span style=color:#ae81ff>0</span>], data[:<span style=color:#ae81ff>50</span>, <span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#34;bo&#34;</span>, color<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;blue&#34;</span>, label<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;0&#34;</span>)
+plt<span style=color:#f92672>.</span>plot(data[<span style=color:#ae81ff>50</span>:<span style=color:#ae81ff>100</span>, <span style=color:#ae81ff>0</span>], data[<span style=color:#ae81ff>50</span>:<span style=color:#ae81ff>100</span>, <span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#34;bo&#34;</span>, color<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;orange&#34;</span>, label<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;1&#34;</span>)
+plt<span style=color:#f92672>.</span>xlabel(<span style=color:#e6db74>&#34;sepal length&#34;</span>)
+plt<span style=color:#f92672>.</span>ylabel(<span style=color:#e6db74>&#34;sepal width&#34;</span>)
+plt<span style=color:#f92672>.</span>legend()
+
+
+</code></pre></div><pre><code>&lt;ipython-input-6-40c643185f1c&gt;:5: UserWarning: color is redundantly defined by the 'color' keyword argument and the fmt string &quot;bo&quot; (-&gt; color='b'). The keyword argument will take precedence.
+  plt.plot(data[:50, 0], data[:50, 1], &quot;bo&quot;, color=&quot;blue&quot;, label=&quot;0&quot;)
+&lt;ipython-input-6-40c643185f1c&gt;:6: UserWarning: color is redundantly defined by the 'color' keyword argument and the fmt string &quot;bo&quot; (-&gt; color='b'). The keyword argument will take precedence.
+  plt.plot(data[50:100, 0], data[50:100, 1], &quot;bo&quot;, color=&quot;orange&quot;, label=&quot;1&quot;)
+
+
+
+
+
+&lt;matplotlib.legend.Legend at 0x7efcfe32d310&gt;
+</code></pre><p><img src=Perceptron_test_files/Perceptron_test_5_2.svg alt=svg></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># sklearn example</span>
+<span style=color:#f92672>from</span> sklearn.linear_model <span style=color:#f92672>import</span> Perceptron
+
+<span style=color:#75715e># sk_pc = Perceptron(fit_intercept=True, max_iter=50, shuffle=True)</span>
+<span style=color:#75715e># sk_pc.fit(X, Y)</span>
+<span style=color:#75715e># print(sk_pc.coef_)</span>
+<span style=color:#75715e># print(sk_pc.intercept_)</span>
+sk_pc <span style=color:#f92672>=</span> Perceptron(fit_intercept<span style=color:#f92672>=</span>True, max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>100</span>, shuffle<span style=color:#f92672>=</span>True)
+sk_pc<span style=color:#f92672>.</span>fit(X, Y)
+sk_pc<span style=color:#f92672>.</span>score(X, Y)
+
+</code></pre></div><pre><code>0.99
+</code></pre></div></details><h2 id=code>Code
+<a class=anchor href=#code>#</a></h2><details><summary>Show Code</summary><div class=markdown-inner><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e>#%%</span>
+<span style=color:#f92672>from</span> typing <span style=color:#f92672>import</span> Tuple
+<span style=color:#f92672>import</span> numpy <span style=color:#f92672>as</span> np
+<span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#f92672>as</span> plt
+<span style=color:#f92672>import</span> time
+
+<span style=color:#75715e>#%%</span>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Perceptron</span>:
+    <span style=color:#66d9ef>def</span> __init__(self, l_r<span style=color:#f92672>=</span><span style=color:#ae81ff>0.1</span>) <span style=color:#f92672>-&gt;</span> None:
+        self<span style=color:#f92672>.</span>w <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        self<span style=color:#f92672>.</span>b <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        self<span style=color:#f92672>.</span>l_r <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.1</span>
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>sign</span>(self, x):
+        <span style=color:#66d9ef>return</span> np<span style=color:#f92672>.</span>sign(np<span style=color:#f92672>.</span>dot(self<span style=color:#f92672>.</span>w, x) <span style=color:#f92672>+</span> self<span style=color:#f92672>.</span>b)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>fit</span>(self, X, Y, iter<span style=color:#f92672>=</span><span style=color:#ae81ff>50</span>, w<span style=color:#f92672>=</span>None, b<span style=color:#f92672>=</span>None, l_r<span style=color:#f92672>=</span>None):
+        <span style=color:#66d9ef>if</span> w <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            <span style=color:#66d9ef>if</span> np<span style=color:#f92672>.</span>shape(X)[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> len(w):
+                self<span style=color:#f92672>.</span>w <span style=color:#f92672>=</span> w
+            <span style=color:#66d9ef>else</span>:
+                <span style=color:#66d9ef>raise</span> <span style=color:#a6e22e>ValueError</span>(
+                    <span style=color:#e6db74>&#34;dimesion of w {} differs from X {}.&#34;</span><span style=color:#f92672>.</span>format(
+                        len(w), np<span style=color:#f92672>.</span>shape(X)[<span style=color:#ae81ff>1</span>]
+                    )
+                )
+        <span style=color:#66d9ef>else</span>:
+            self<span style=color:#f92672>.</span>w <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros(np<span style=color:#f92672>.</span>shape(X)[<span style=color:#ae81ff>1</span>])
+        <span style=color:#66d9ef>if</span> b <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            self<span style=color:#f92672>.</span>b <span style=color:#f92672>=</span> b
+        <span style=color:#66d9ef>if</span> l_r <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            self<span style=color:#f92672>.</span>l_r <span style=color:#f92672>=</span> l_r
+
+        cur <span style=color:#f92672>=</span> wrong_times <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        <span style=color:#66d9ef>while</span> cur <span style=color:#f92672>&lt;</span> iter:
+            id <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+            <span style=color:#66d9ef>while</span> id <span style=color:#f92672>&lt;</span> len(X):
+                <span style=color:#66d9ef>if</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> <span style=color:#f92672>*</span> Y[id] <span style=color:#f92672>*</span> self<span style=color:#f92672>.</span>sign(X[id]) <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>0</span>:
+                    self<span style=color:#f92672>.</span>w <span style=color:#f92672>+=</span> self<span style=color:#f92672>.</span>l_r <span style=color:#f92672>*</span> np<span style=color:#f92672>.</span>dot(Y[id], X[id])
+                    self<span style=color:#f92672>.</span>b <span style=color:#f92672>+=</span> self<span style=color:#f92672>.</span>l_r <span style=color:#f92672>*</span> Y[id]
+                    wrong_times <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+                id <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+            cur <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+            <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\r</span><span style=color:#e6db74>iterated {}/{} times.&#34;</span><span style=color:#f92672>.</span>format(cur, iter), end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;&#34;</span>)
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;&#34;</span>, end<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#34;</span>)
+        <span style=color:#66d9ef>print</span>(
+            <span style=color:#e6db74>&#34;w {}, b {}, learning_rate {}, wrong times {}&#34;</span><span style=color:#f92672>.</span>format(
+                self<span style=color:#f92672>.</span>w, self<span style=color:#f92672>.</span>b, self<span style=color:#f92672>.</span>l_r, wrong_times
+            )
+        )
+
+
+<span style=color:#75715e>################################################################################</span>
+<span style=color:#75715e># MNIST Data</span>
+<span style=color:#75715e>#%%</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>load_mnist_data</span>(path) <span style=color:#f92672>-&gt;</span> Tuple[list, list]:
+    X <span style=color:#f92672>=</span> []
+    Y <span style=color:#f92672>=</span> []
+    <span style=color:#66d9ef>with</span> open(path, <span style=color:#e6db74>&#34;r&#34;</span>) <span style=color:#66d9ef>as</span> fi:
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;start to read {}&#34;</span><span style=color:#f92672>.</span>format(path))
+        <span style=color:#66d9ef>for</span> line <span style=color:#f92672>in</span> fi<span style=color:#f92672>.</span>readlines():
+            curLine <span style=color:#f92672>=</span> line<span style=color:#f92672>.</span>strip()<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34;,&#34;</span>)
+            Y<span style=color:#f92672>.</span>append(<span style=color:#ae81ff>1</span> <span style=color:#66d9ef>if</span> int(curLine[<span style=color:#ae81ff>0</span>]) <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>5</span> <span style=color:#66d9ef>else</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
+            X<span style=color:#f92672>.</span>append([int(num) <span style=color:#f92672>/</span> <span style=color:#ae81ff>255</span> <span style=color:#66d9ef>for</span> num <span style=color:#f92672>in</span> curLine[<span style=color:#ae81ff>1</span>:]])
+        <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;read end.&#34;</span>)
+    <span style=color:#66d9ef>return</span> X, Y
+
+
+<span style=color:#75715e>#%%</span>
+<span style=color:#75715e># load mnist data</span>
+X, Y <span style=color:#f92672>=</span> load_mnist_data(
+    <span style=color:#e6db74>&#34;/home/ias/workdir/ml-primary/ml-notes/data/Mnist/mnist_train/mnist_train.csv&#34;</span>
+)
+X_t, Y_t <span style=color:#f92672>=</span> load_mnist_data(
+    <span style=color:#e6db74>&#34;/home/ias/workdir/ml-primary/ml-notes/data/Mnist/mnist_test/mnist_test.csv&#34;</span>
+)
+
+<span style=color:#75715e># %%</span>
+<span style=color:#75715e># train on mnist train data</span>
+start_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+pc <span style=color:#f92672>=</span> Perceptron(l_r<span style=color:#f92672>=</span><span style=color:#ae81ff>0.001</span>)
+pc<span style=color:#f92672>.</span>fit(X, Y, <span style=color:#ae81ff>50</span>)
+end_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;training costs {} s&#34;</span><span style=color:#f92672>.</span>format(end_time <span style=color:#f92672>-</span> start_time))
+
+<span style=color:#75715e>#%%</span>
+<span style=color:#75715e># test on mnist test data</span>
+right <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+wrong <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+errors <span style=color:#f92672>=</span> []
+<span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(len(X_t)):
+    y_t <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>if</span> Y_t[i] <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>5</span> <span style=color:#66d9ef>else</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>
+    <span style=color:#66d9ef>if</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> <span style=color:#f92672>*</span> Y_t[i] <span style=color:#f92672>*</span> pc<span style=color:#f92672>.</span>sign(X_t[i]) <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0</span>:
+        right <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+    <span style=color:#66d9ef>else</span>:
+        wrong <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+<span style=color:#66d9ef>print</span>(
+    <span style=color:#e6db74>&#34;right {}, error {}, rate {}%&#34;</span><span style=color:#f92672>.</span>format(
+        right, wrong, right <span style=color:#f92672>/</span> (right <span style=color:#f92672>+</span> wrong) <span style=color:#f92672>*</span> <span style=color:#ae81ff>100</span>
+    )
+)
+
+<span style=color:#75715e>################################################################################</span>
+<span style=color:#75715e># Sklearn iris data</span>
+<span style=color:#75715e>#%%</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>load_sk_data</span>():
+    <span style=color:#f92672>import</span> matplotlib.pyplot <span style=color:#f92672>as</span> plt
+    <span style=color:#f92672>import</span> pandas <span style=color:#f92672>as</span> pd
+    <span style=color:#f92672>from</span> sklearn.datasets <span style=color:#f92672>import</span> load_iris
+
+    <span style=color:#75715e># load data</span>
+    iris <span style=color:#f92672>=</span> load_iris()
+    df <span style=color:#f92672>=</span> pd<span style=color:#f92672>.</span>DataFrame(iris<span style=color:#f92672>.</span>data, columns<span style=color:#f92672>=</span>iris<span style=color:#f92672>.</span>feature_names)
+    df[<span style=color:#e6db74>&#34;label&#34;</span>] <span style=color:#f92672>=</span> iris<span style=color:#f92672>.</span>target
+    df<span style=color:#f92672>.</span>columns <span style=color:#f92672>=</span> [
+        <span style=color:#e6db74>&#34;sepal length&#34;</span>,
+        <span style=color:#e6db74>&#34;sepal width&#34;</span>,
+        <span style=color:#e6db74>&#34;petal length&#34;</span>,
+        <span style=color:#e6db74>&#34;petal width&#34;</span>,
+        <span style=color:#e6db74>&#34;label&#34;</span>,
+    ]
+    df<span style=color:#f92672>.</span>label<span style=color:#f92672>.</span>value_counts()
+    data <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(df<span style=color:#f92672>.</span>iloc[:<span style=color:#ae81ff>100</span>, [<span style=color:#ae81ff>0</span>, <span style=color:#ae81ff>1</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]])
+    X, y <span style=color:#f92672>=</span> data[:, :<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>], data[:, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]
+    Y <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array([<span style=color:#ae81ff>1</span> <span style=color:#66d9ef>if</span> i <span style=color:#f92672>==</span> <span style=color:#ae81ff>1</span> <span style=color:#66d9ef>else</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span> <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> y])
+    <span style=color:#66d9ef>return</span> X, Y, data
+
+
+<span style=color:#75715e># %%</span>
+<span style=color:#75715e># load sk data</span>
+X, Y, data <span style=color:#f92672>=</span> load_sk_data()
+
+<span style=color:#75715e># %%</span>
+<span style=color:#75715e># train on sk data</span>
+start_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+pc <span style=color:#f92672>=</span> Perceptron()
+pc<span style=color:#f92672>.</span>fit(X, Y, <span style=color:#ae81ff>200</span>)
+end_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
+<span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;training costs {} s&#34;</span><span style=color:#f92672>.</span>format(end_time <span style=color:#f92672>-</span> start_time))
+
+<span style=color:#75715e>#%%</span>
+x_ <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>linspace(<span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>10</span>)
+y_ <span style=color:#f92672>=</span> <span style=color:#f92672>-</span>(pc<span style=color:#f92672>.</span>w[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>*</span> x_ <span style=color:#f92672>+</span> pc<span style=color:#f92672>.</span>b) <span style=color:#f92672>/</span> pc<span style=color:#f92672>.</span>w[<span style=color:#ae81ff>1</span>]
+
+plt<span style=color:#f92672>.</span>plot(x_, y_)
+plt<span style=color:#f92672>.</span>plot(data[:<span style=color:#ae81ff>50</span>, <span style=color:#ae81ff>0</span>], data[:<span style=color:#ae81ff>50</span>, <span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#34;bo&#34;</span>, color<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;blue&#34;</span>, label<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;0&#34;</span>)
+plt<span style=color:#f92672>.</span>plot(data[<span style=color:#ae81ff>50</span>:<span style=color:#ae81ff>100</span>, <span style=color:#ae81ff>0</span>], data[<span style=color:#ae81ff>50</span>:<span style=color:#ae81ff>100</span>, <span style=color:#ae81ff>1</span>], <span style=color:#e6db74>&#34;bo&#34;</span>, color<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;orange&#34;</span>, label<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;1&#34;</span>)
+plt<span style=color:#f92672>.</span>xlabel(<span style=color:#e6db74>&#34;sepal length&#34;</span>)
+plt<span style=color:#f92672>.</span>ylabel(<span style=color:#e6db74>&#34;sepal width&#34;</span>)
+plt<span style=color:#f92672>.</span>legend()
+
+
+<span style=color:#75715e># %%</span>
+<span style=color:#75715e># sklearn example</span>
+<span style=color:#f92672>from</span> sklearn.linear_model <span style=color:#f92672>import</span> Perceptron
+
+<span style=color:#75715e># sk_pc = Perceptron(fit_intercept=True, max_iter=50, shuffle=True)</span>
+<span style=color:#75715e># sk_pc.fit(X, Y)</span>
+<span style=color:#75715e># print(sk_pc.coef_)</span>
+<span style=color:#75715e># print(sk_pc.intercept_)</span>
+sk_pc <span style=color:#f92672>=</span> Perceptron(fit_intercept<span style=color:#f92672>=</span>True, max_iter<span style=color:#f92672>=</span><span style=color:#ae81ff>100</span>, shuffle<span style=color:#f92672>=</span>True)
+sk_pc<span style=color:#f92672>.</span>fit(X, Y)
+sk_pc<span style=color:#f92672>.</span>score(X, Y)
+
+<span style=color:#75715e># %%</span>
+
+</code></pre></div></div></details></article><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/PorYoung/machine-learning-notes/commit/5b57bcc0baa05470e5b414e0ecf0ca0e79508188 title="Last modified by PorYoung | May 14, 2021" target=_blank rel=noopener><img src=/svg/calendar.svg class=book-icon alt=Calendar>
+<span>May 14, 2021</span></a></div><div><a class="flex align-center" href=https://github.com/PorYoung/machine-learning-notes/./content/docs/notes/Perceptron.md target=_blank rel=noopener><img src=/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div></div><script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script></footer><div class=book-comments></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><a href=#perceptron>Perceptron</a><ul><li><a href=#loss-function>Loss Function</a></li><li><a href=#target>Target</a></li><li><a href=#method>Method</a><ul><li><a href=#随机梯度下降法>随机梯度下降法</a></li></ul></li><li><a href=#convergence>Convergence</a></li><li><a href=#form-of-duality>Form of duality</a></li><li><a href=#example>Example</a></li><li><a href=#code>Code</a></li></ul></li></ul></nav></div></aside></main></body></html>
