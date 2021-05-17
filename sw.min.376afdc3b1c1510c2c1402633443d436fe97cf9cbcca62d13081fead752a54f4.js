@@ -1,0 +1,1 @@
+navigator.serviceWorker&&navigator.serviceWorker.register("/machine-learning-notes/sw.js",{scope:"/machine-learning-notes/"})
